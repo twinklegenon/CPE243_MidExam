@@ -1,0 +1,177 @@
+---
+##UBUNTU
+- hosts: all
+  become: yes
+  tasks:
+    - name: install ufw on Ubuntu
+      apt:
+        name: ufw
+        state: present
+      when: ansible_distribution == "Ubuntu"
+
+    - name: allow everything and enable ufw
+      ufw:
+        state: enabled
+        policy: allow
+      when: ansible_distribution == "Ubuntu"
+
+    - name: set logging
+      ufw:
+        logging: 'on'
+      when: ansible_distribution == "Ubuntu"
+
+    - ufw:
+        rule: reject
+        port: auth
+        log: yes
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Deny TCP
+      ufw:
+        rule: deny
+        port: telnet
+        proto: tcp
+      when: ansible_distribution == "Ubuntu"
+
+    - ufw:
+        rule: limit
+        port: ssh
+        proto: tcp
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Allow ssh
+      ufw:
+        rule: allow
+        name: OpenSSH
+      when: ansible_distribution == "Ubuntu"
+
+    - name: allow OpenSSH rule
+      ufw:
+        rule: allow
+        name: OpenSSH
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Deny all access to port 53 DNS
+      ufw:
+        rule: deny
+        port: '53'
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Allow port range 60000-61000
+      ufw:
+        rule: allow
+        port: 60000:61000
+        proto: tcp
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Allow all access to tcp port 80 [HTTP TRAFFIC]
+      ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Allow all access to tcp port 443 [HTTPS TRAFFIC]
+      ufw:
+        rule: allow
+        port: '443'
+        proto: tcp
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Allow all access from RFC1918 networks to this host
+      ufw:
+        rule: allow
+        src: 192.168.56.132
+      loop:
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+      when: ansible_distribution == "Ubuntu"
+      
+###CENTOS      
+    - name: install ufw on Ubuntu
+      apt:
+        name: ufw
+        state: present
+      when: ansible_distribution == "CentOS"
+
+    - name: allow everything and enable ufw
+      ufw:
+        state: enabled
+        policy: allow
+      when: ansible_distribution == "CentOS"
+
+    - name: set logging
+      ufw:
+        logging: 'on'
+      when: ansible_distribution == "CentOS"
+
+    - ufw:
+        rule: reject
+        port: auth
+        log: yes
+      when: ansible_distribution == "CentOS"
+
+    - name: Deny TCP
+      ufw:
+        rule: deny
+        port: telnet
+        proto: tcp
+      when: ansible_distribution == "CentOS"
+
+    - ufw:
+        rule: limit
+        port: ssh
+        proto: tcp
+      when: ansible_distribution == "CentOS"
+
+    - name: Allow ssh
+      ufw:
+        rule: allow
+        name: OpenSSH
+      when: ansible_distribution == "CentOS"
+
+    - name: allow OpenSSH rule
+      ufw:
+        rule: allow
+        name: OpenSSH
+      when: ansible_distribution == "CentOS"
+
+    - name: Deny all access to port 53 DNS
+      ufw:
+        rule: deny
+        port: '53'
+      when: ansible_distribution == "CentOS"
+
+    - name: Allow port range 60000-61000
+      ufw:
+        rule: allow
+        port: 60000:61000
+        proto: tcp
+      when: ansible_distribution == "CentOS"
+
+    - name: Allow all access to tcp port 80 [HTTP TRAFFIC]
+      ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+      when: ansible_distribution == "CentOS"
+
+    - name: Allow all access to tcp port 443 [HTTPS TRAFFIC]
+      ufw:
+        rule: allow
+        port: '443'
+        proto: tcp
+      when: ansible_distribution == "CentOS"
+
+    - name: Allow all access from RFC1918 networks to this host
+      ufw:
+        rule: allow
+        src: 192.168.56.132
+      loop:
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+      when: ansible_distribution == "CentOS"
+
+
